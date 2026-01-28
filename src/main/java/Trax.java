@@ -5,10 +5,14 @@ public class Trax {
     static class Task {
         private String task;
         private boolean completed;
+        private char taskType;
+        private String dateTime;
 
-        public Task(String _task, boolean _completed) {
+        public Task(String _task, boolean _completed, char _taskType, String _dateTime) {
             task = _task;
             completed = _completed;
+            taskType = _taskType;
+            dateTime = _dateTime;
         }
 
         public String getTask() {
@@ -27,7 +31,15 @@ public class Trax {
         public String toString() {
             char _completed = ' ';
             if (this.completed) _completed = 'X';
-            return String.format("[%c] %s", _completed, task);
+            return String.format("[%c][%c] %s %s", taskType, _completed, task, dateTime);
+        }
+
+        public char getTaskType() {
+            return taskType;
+        }
+
+        public String getDateTime() {
+            return dateTime;
         }
     }
 
@@ -43,14 +55,17 @@ public class Trax {
 
         while (true) {
             String input = scanner.nextLine();
-            String[] inputArr = input.split(" ");
+            //General event
+            String[] inputArr = input.split(" ", 2);
             String command = inputArr[0];
+
 
             switch (command) {
                 case "bye":
                     System.out.println("Bye. Hope to see you again soon!");
                     break;
                 case "list":
+                    System.out.println("Heres are the tasks in your list:");
                     for (int i = 1; i <= tasks.size(); i++) {
                         System.out.printf("%d. %s%n", i, tasks.get(i - 1).toString());
                     }
@@ -65,12 +80,39 @@ public class Trax {
                     tasks.get(taskNum).setCompleted(false);
                     System.out.println("OK, I've marked this task as not done yet:\n" + tasks.get(taskNum).toString());
                     break;
-                default:
-                    tasks.add(new Trax.Task(input, false));
-                    System.out.println("added: " + input);
+                case "todo":
+                    tasks.add(new Trax.Task(inputArr[1], false, 'T', ""));
+                    printAddedTask(tasks);
+                    break;
+                case "deadline":
+                    String[] deadLineTemp = inputArr[1].split("/by\\s*", 2);
+                    String deadLine = String.format("(by: %s)", deadLineTemp[1].trim());
+                    tasks.add(new Trax.Task(deadLineTemp[0].trim(), false, 'D', deadLine));
+                    printAddedTask(tasks);
+                    break;
+                case "event":
+                    String[] eventTemp = inputArr[1].split("/from\\s*", 2);
+                    String[] eventTemp2 = eventTemp[1].split("/to\\s*", 2);
+                    String start = eventTemp2[0].trim();
+                    String end = eventTemp2[1].trim();
+                    String duration = String.format("from: %s to: %s", start, end);
+                    tasks.add(new Trax.Task(eventTemp[0], false, 'E', duration));
+
+                    printAddedTask(tasks);
+                    break;
+
+
+//                default: //maybe delete
+//                    tasks.add(new Trax.Task(input, false));
+//                    System.out.println("added: " + input);
             }
 
         }
 
+    }
+
+    public static void printAddedTask(ArrayList<Task> tasks) {
+        System.out.printf("Got it. I've added this task: \n %s\n", tasks.get(tasks.size() - 1).toString());
+        System.out.printf("Now you have %d tasks in the list.\n", tasks.size());
     }
 }
