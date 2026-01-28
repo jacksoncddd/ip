@@ -70,13 +70,12 @@ public class Trax {
                         System.out.printf("%d. %s%n", i, tasks.get(i - 1).toString());
                     }
                     break;
-                //after all done, then commit L6
-//                case "delete":
-//                    taskNum = Integer.parseInt(inputArr[1]) - 1;
-//                    Task t = tasks.get(taskNum);
-//                    tasks.remove(taskNum);
-//                    printDeletedTask(t, tasks.size());
-//                    break;
+                case "delete":
+                    taskNum = Integer.parseInt(inputArr[1]) - 1;
+                    Task t = tasks.get(taskNum);
+                    tasks.remove(taskNum);
+                    printDeletedTask(t, tasks.size());
+                    break;
                 case "mark":
                     taskNum = Integer.parseInt(inputArr[1]) - 1;
                     tasks.get(taskNum).setCompleted(true);
