@@ -70,6 +70,13 @@ public class Trax {
                         System.out.printf("%d. %s%n", i, tasks.get(i - 1).toString());
                     }
                     break;
+                //after all done, then commit L6
+//                case "delete":
+//                    taskNum = Integer.parseInt(inputArr[1]) - 1;
+//                    Task t = tasks.get(taskNum);
+//                    tasks.remove(taskNum);
+//                    printDeletedTask(t, tasks.size());
+//                    break;
                 case "mark":
                     taskNum = Integer.parseInt(inputArr[1]) - 1;
                     tasks.get(taskNum).setCompleted(true);
@@ -97,14 +104,9 @@ public class Trax {
                     String end = eventTemp2[1].trim();
                     String duration = String.format("from: %s to: %s", start, end);
                     tasks.add(new Trax.Task(eventTemp[0], false, 'E', duration));
-
                     printAddedTask(tasks);
                     break;
 
-
-//                default: //maybe delete
-//                    tasks.add(new Trax.Task(input, false));
-//                    System.out.println("added: " + input);
             }
 
         }
@@ -114,5 +116,10 @@ public class Trax {
     public static void printAddedTask(ArrayList<Task> tasks) {
         System.out.printf("Got it. I've added this task: \n %s\n", tasks.get(tasks.size() - 1).toString());
         System.out.printf("Now you have %d tasks in the list.\n", tasks.size());
+    }
+
+    public static void printDeletedTask(Task task, int listSize) {
+        System.out.printf("Got it. I've removed this task: \n %s\n", task.toString());
+        System.out.printf("Now you have %d tasks in the list.\n", listSize);
     }
 }
