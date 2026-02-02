@@ -30,7 +30,9 @@ public class Trax {
         @Override
         public String toString() {
             char _completed = ' ';
-            if (this.completed) _completed = 'X';
+            if (this.completed) {
+                _completed = 'X';
+            }
             return String.format("[%c][%c] %s %s", taskType, _completed, task, dateTime);
         }
 
@@ -54,13 +56,15 @@ public class Trax {
         System.out.println("What can I do for you?\n");
 
         while (true) {
-            String input = scanner.nextLine();
-            //General event
-            String[] inputArr = input.split(" ", 2);
-            String command = inputArr[0];
+
+            try {
+                String input = scanner.nextLine();
+                //General event
+                String[] inputArr = input.split(" ", 2);
+                String command = inputArr[0];
 
 
-            switch (command) {
+                switch (command) {
                 case "bye":
                     System.out.println("Bye. Hope to see you again soon!");
                     break;
@@ -71,40 +75,54 @@ public class Trax {
                     }
                     break;
                 case "delete":
+                    //handleDelete();
                     taskNum = Integer.parseInt(inputArr[1]) - 1;
                     Task t = tasks.get(taskNum);
                     tasks.remove(taskNum);
                     printDeletedTask(t, tasks.size());
                     break;
                 case "mark":
-                    taskNum = Integer.parseInt(inputArr[1]) - 1;
-                    tasks.get(taskNum).setCompleted(true);
-                    System.out.println("Nice! I've marked this task as done:\n" + tasks.get(taskNum).toString());
-                    break;
+//                    taskNum = Integer.parseInt(inputArr[1]) - 1;
+//                    tasks.get(taskNum).setCompleted(true);
+//                    System.out.println("Nice! I've marked this task as done:\n" + tasks.get(taskNum).toString());
+//                    break;
                 case "unmark":
-                    taskNum = Integer.parseInt(inputArr[1]) - 1;
-                    tasks.get(taskNum).setCompleted(false);
-                    System.out.println("OK, I've marked this task as not done yet:\n" + tasks.get(taskNum).toString());
+//                    taskNum = Integer.parseInt(inputArr[1]) - 1;
+//                    tasks.get(taskNum).setCompleted(false);
+//                    System.out.println("OK, I've marked this task as not done yet:\n" + tasks.get(taskNum).toString());
+//                    break;
+                    handleMarkUnmark(tasks, inputArr, command);
                     break;
                 case "todo":
-                    tasks.add(new Trax.Task(inputArr[1], false, 'T', ""));
-                    printAddedTask(tasks);
+//                        tasks.add(new Trax.Task(inputArr[1], false, 'T', ""));
+//                        printAddedTask(tasks);
+                    handleTodo(tasks, inputArr);
                     break;
                 case "deadline":
-                    String[] deadLineTemp = inputArr[1].split("/by\\s*", 2);
-                    String deadLine = String.format("(by: %s)", deadLineTemp[1].trim());
-                    tasks.add(new Trax.Task(deadLineTemp[0].trim(), false, 'D', deadLine));
-                    printAddedTask(tasks);
+//                        String[] deadLineTemp = inputArr[1].split("/by\\s*", 2);
+//                        String deadLine = String.format("(by: %s)", deadLineTemp[1].trim());
+//                        tasks.add(new Trax.Task(deadLineTemp[0].trim(), false, 'D', deadLine));
+//                        printAddedTask(tasks);
+                    handleDeadline(tasks, inputArr);
                     break;
                 case "event":
-                    String[] eventTemp = inputArr[1].split("/from\\s*", 2);
-                    String[] eventTemp2 = eventTemp[1].split("/to\\s*", 2);
-                    String start = eventTemp2[0].trim();
-                    String end = eventTemp2[1].trim();
-                    String duration = String.format("from: %s to: %s", start, end);
-                    tasks.add(new Trax.Task(eventTemp[0], false, 'E', duration));
-                    printAddedTask(tasks);
+//                        String[] eventTemp = inputArr[1].split("/from\\s*", 2);
+//                        String[] eventTemp2 = eventTemp[1].split("/to\\s*", 2);
+//                        String start = eventTemp2[0].trim();
+//                        String end = eventTemp2[1].trim();
+//                        String duration = String.format("from: %s to: %s", start, end);
+//                        tasks.add(new Trax.Task(eventTemp[0], false, 'E', duration));
+//                        printAddedTask(tasks);
+                    handleEvent(tasks, inputArr);
                     break;
+                default:
+                    throw new UnknownCommandException();
+                }
+
+            } catch (TraxException e) {
+                System.out.println("     " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("     " + e.getMessage());
 
             }
 
@@ -121,4 +139,96 @@ public class Trax {
         System.out.printf("Got it. I've removed this task: \n %s\n", task.toString());
         System.out.printf("Now you have %d tasks in the list.\n", listSize);
     }
+
+    private static void handleMarkUnmark(ArrayList<Task> tasks, String[] inputArr, String command)
+            throws InvalidTaskNumberException, EmptyDescriptionException {
+        if (inputArr.length < 2 || inputArr[1].trim().isEmpty()) {
+            throw new EmptyDescriptionException(command);
+        }
+
+        try {
+            int taskNum = Integer.parseInt(inputArr[1].trim()) - 1;
+
+            if (taskNum < 0 || taskNum >= tasks.size()) {
+                throw new InvalidTaskNumberException();
+            }
+
+            if (command.equals("mark")) {
+                tasks.get(taskNum).setCompleted(true);
+                System.out.println("Nice! I've marked this task as done:\n" + tasks.get(taskNum).toString());
+
+            } else {
+                tasks.get(taskNum).setCompleted(false);
+                System.out.println("OK, I've marked this task as not done yet:\n" + tasks.get(taskNum).toString());
+            }
+        } catch (NumberFormatException e) {
+            throw new InvalidTaskNumberException();
+        }
+    }
+
+    private static void handleTodo(ArrayList<Task> tasks, String[] inputArr)
+            throws EmptyDescriptionException {
+        if (inputArr.length < 2 || inputArr[1].trim().isEmpty()) {
+            throw new EmptyDescriptionException("todo");
+        }
+
+        tasks.add(new Trax.Task(inputArr[1], false, 'T', ""));
+        printAddedTask(tasks);
+    }
+
+    private static void handleDeadline(ArrayList<Task> tasks, String[] inputArr)
+            throws EmptyDescriptionException, InvalidFormatException {
+        if (inputArr.length < 2 || inputArr[1].trim().isEmpty()) {
+            throw new EmptyDescriptionException("deadline");
+        }
+
+        if (!inputArr[1].contains("/by")) {
+            throw new InvalidFormatException("Deadline format should be: deadline <description> /by <date>");
+        }
+
+        String[] deadLineTemp = inputArr[1].split("/by\\s*", 2);
+
+        if (deadLineTemp[0].trim().isEmpty()) {
+            throw new EmptyDescriptionException("deadline");
+        }
+
+        if (deadLineTemp.length < 2 || deadLineTemp[1].trim().isEmpty()) {
+            throw new InvalidFormatException("Deadline date cannot be empty.");
+        }
+
+        String deadLine = String.format("(by: %s)", deadLineTemp[1].trim());
+        tasks.add(new Task(deadLineTemp[0].trim(), false, 'D', deadLine));
+        printAddedTask(tasks);
+    }
+
+    private static void handleEvent(ArrayList<Task> tasks, String[] inputArr)
+            throws EmptyDescriptionException, InvalidFormatException {
+        if (inputArr.length < 2 || inputArr[1].trim().isEmpty()) {
+            throw new EmptyDescriptionException("event");
+        }
+
+        if (!inputArr[1].contains("/from") || !inputArr[1].contains("/to")) {
+            throw new InvalidFormatException("Event format should be: event <description> /from <start> /to <end>");
+        }
+
+        String[] eventTemp = inputArr[1].split("/from\\s*", 2);
+
+        if (eventTemp[0].trim().isEmpty()) {
+            throw new EmptyDescriptionException("event");
+        }
+
+        String[] eventTemp2 = eventTemp[1].split("/to\\s*", 2);
+
+        if (eventTemp2.length < 2 || eventTemp2[0].trim().isEmpty() || eventTemp2[1].trim().isEmpty()) {
+            throw new InvalidFormatException("Event start and end times cannot be empty.");
+        }
+
+        String start = eventTemp2[0].trim();
+        String end = eventTemp2[1].trim();
+        String duration = String.format("(from: %s to: %s)", start, end);
+        tasks.add(new Task(eventTemp[0].trim(), false, 'E', duration));
+        printAddedTask(tasks);
+    }
+
+
 }
