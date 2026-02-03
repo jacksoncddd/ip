@@ -2,53 +2,16 @@ import java.util.*;
 
 
 public class Trax {
-    static class Task {
-        private String task;
-        private boolean isCompleted;
-        private char taskType;
-        private String dateTime;
-
-        public Task(String _task, boolean _completed, char _taskType, String _dateTime) {
-            task = _task;
-            isCompleted = _completed;
-            taskType = _taskType;
-            dateTime = _dateTime;
-        }
-
-        public String getTask() {
-            return task;
-        }
-
-        public boolean isCompleted() {
-            return isCompleted;
-        }
-
-        public void setCompleted(boolean completed) {
-            this.isCompleted = completed;
-        }
-
-        @Override
-        public String toString() {
-            char _completed = ' ';
-            if (this.isCompleted) {
-                _completed = 'X';
-            }
-            return String.format("[%c][%c] %s %s", taskType, _completed, task, dateTime);
-        }
-
-        public char getTaskType() {
-            return taskType;
-        }
-
-        public String getDateTime() {
-            return dateTime;
-        }
-    }
 
     public static void main(String[] args) {
 
         ArrayList<Task> tasks = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
+
+        String filePath = "./data/tasks.txt";
+        Storage storage = new Storage(filePath);
+
+        tasks = storage.loadTasks();
 
         int taskNum = 0;
 
@@ -67,7 +30,9 @@ public class Trax {
                 switch (command) {
                     case "bye":
                         System.out.println("Bye. Hope to see you again soon!");
-                        break;
+                        storage.saveTasks(tasks);
+                        scanner.close();
+                        return;
                     case "list":
                         System.out.println("Heres are the tasks in your list:");
                         for (int i = 1; i <= tasks.size(); i++) {
@@ -76,19 +41,24 @@ public class Trax {
                         break;
                     case "delete":
                         handleDelete(tasks, inputArr);
+                        storage.saveTasks(tasks);
                         break;
                     case "mark":
                     case "unmark":
                         handleMarkUnmark(tasks, inputArr, command);
+                        storage.saveTasks(tasks);
                         break;
                     case "todo":
                         handleTodo(tasks, inputArr);
+                        storage.saveTasks(tasks);
                         break;
                     case "deadline":
                         handleDeadline(tasks, inputArr);
+                        storage.saveTasks(tasks);
                         break;
                     case "event":
                         handleEvent(tasks, inputArr);
+                        storage.saveTasks(tasks);
                         break;
                     default:
                         throw new UnknownCommandException();
@@ -100,9 +70,7 @@ public class Trax {
                 System.out.println("     " + e.getMessage());
 
             }
-
         }
-
     }
 
     public static void printAddedTask(ArrayList<Task> tasks) {
@@ -147,7 +115,7 @@ public class Trax {
             throw new EmptyDescriptionException("todo");
         }
 
-        tasks.add(new Trax.Task(inputArr[1], false, 'T', ""));
+        tasks.add(new Task(inputArr[1], false, 'T', ""));
         printAddedTask(tasks);
     }
 
@@ -219,7 +187,6 @@ public class Trax {
         Task t = tasks.get(taskNum);
         tasks.remove(taskNum);
         printDeletedTask(t, tasks.size());
-
 
     }
 

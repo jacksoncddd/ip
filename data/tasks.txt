@@ -1,0 +1,2 @@
+T | 0 | assignments! | 
+E | 0 | wassup | (from: Mon 2pm to: 4pm)
