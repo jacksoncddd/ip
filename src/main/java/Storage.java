@@ -1,5 +1,11 @@
-import java.io.*;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 //deletion is handled automatically
 
@@ -88,7 +94,7 @@ public class Storage {
                 task.getTaskType(),
                 completed,
                 task.getTask(),
-                task.getDateTime());
+                task.getDateTimeForStorage());
     }
 
     /**
@@ -108,9 +114,28 @@ public class Storage {
             char taskType = parts[0].charAt(0);
             boolean completed = parts[1].equals("1");
             String description = parts[2];
-            String dateTime = parts.length > 3 ? parts[3] : "";
+            //String dateTime = parts.length > 3 ? parts[3] : "";
 
-            return new Task(description, completed, taskType, dateTime);
+            //Create respective tasks
+            if(taskType == 'T') {
+                return new Task(description, completed, taskType);
+            } else if (taskType == 'D') {
+                if (parts.length >= 4 && !parts[3].trim().isEmpty()) {
+                    LocalDateTime deadline = Task.parseDateTime(parts[3]);
+                    return new Task(description, completed, taskType, deadline);
+                }
+            } else if (taskType == 'E') {
+                // For events, the format is "... | startDateTime | endDateTime"
+                // parts[3] = startDateTime, parts[4] = endDateTime
+                if (parts.length >= 5) {
+                    LocalDateTime startTime = Task.parseDateTime(parts[3]);
+                    LocalDateTime endTime = Task.parseDateTime(parts[4]);
+                    return new Task(description, completed, taskType, startTime, endTime);
+                } else {
+                    return new Task(description, completed, taskType);
+                }
+            }
+            return null;
         } catch (Exception e) {
             System.out.println("Error parsing line: " + line);
             return null;
