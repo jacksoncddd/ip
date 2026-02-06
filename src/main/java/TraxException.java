@@ -27,3 +27,9 @@ class InvalidTaskNumberException extends TraxException {
         super("OOPS!!! Invalid task number.");
     }
 }
+
+class InvalidDateFormatException extends TraxException {
+    public InvalidDateFormatException(String message) {
+        super("OOPS!!! Invalid date format. " + message);
+    }
+}
