@@ -1,2 +1,4 @@
 T | 0 | assignments! | 
-E | 0 | wassup | (from: Mon 2pm to: 4pm)
+T | 0 | read book | 
+D | 1 | return book | 2026-02-12 2359
+E | 1 | proj meeting | 2026-01-31 1400 | 2026-02-01 1500

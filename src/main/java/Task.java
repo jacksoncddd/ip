@@ -8,13 +8,11 @@ import java.time.format.DateTimeParseException;
  */
 
 public class Task {
-    /**
-     * Task description
-     */
+    /** Task description */
     private String task;
     private boolean isCompleted;
     private char taskType;
-    //private String dateTime;
+
     private LocalDateTime deadline;          // For deadlines
     private LocalDateTime eventStart;        // For event start time
     private LocalDateTime eventEnd;          // For event end time
@@ -109,17 +107,6 @@ public class Task {
     public LocalDateTime getEventEnd() {
         return eventEnd;
     }
-
-
-//    @Override
-//    public String toString() {
-//        char completed = ' ';
-//        if (this.isCompleted) {
-//            completed = 'X';
-//        }
-//        return String.format("[%c][%c] %s %s", taskType, completed, task, dateTime);
-//    }
-
 
     @Override
     public String toString() {

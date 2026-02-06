@@ -1,11 +1,14 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 
-
+//javadoc?
 public class Trax {
 
     public static void main(String[] args) {
 
-        ArrayList<Task> tasks = new ArrayList<>();
+        ArrayList<Task> tasks;
         Scanner scanner = new Scanner(System.in);
 
         String filePath = "./data/tasks.txt";
@@ -13,7 +16,6 @@ public class Trax {
 
         tasks = storage.loadTasks();
 
-        int taskNum = 0;
 
         System.out.println("Hello! I'm Trax");
         System.out.println("What can I do for you?\n");
@@ -34,7 +36,7 @@ public class Trax {
                         scanner.close();
                         return;
                     case "list":
-                        System.out.println("Heres are the tasks in your list:");
+                        System.out.println("Here are the tasks in your list:");
                         for (int i = 1; i <= tasks.size(); i++) {
                             System.out.printf("%d. %s%n", i, tasks.get(i - 1).toString());
                         }
@@ -73,6 +75,7 @@ public class Trax {
         }
     }
 
+    //need to do javadocs for these
     public static void printAddedTask(ArrayList<Task> tasks) {
         System.out.printf("Got it. I've added this task: \n %s\n", tasks.get(tasks.size() - 1).toString());
         System.out.printf("Now you have %d tasks in the list.\n", tasks.size());
@@ -115,18 +118,18 @@ public class Trax {
             throw new EmptyDescriptionException("todo");
         }
 
-        tasks.add(new Task(inputArr[1], false, 'T', ""));
+        tasks.add(new Task(inputArr[1], false, 'T'));
         printAddedTask(tasks);
     }
 
     private static void handleDeadline(ArrayList<Task> tasks, String[] inputArr)
-            throws EmptyDescriptionException, InvalidFormatException {
+            throws EmptyDescriptionException, InvalidFormatException, InvalidDateFormatException {
         if (inputArr.length < 2 || inputArr[1].trim().isEmpty()) {
             throw new EmptyDescriptionException("deadline");
         }
 
         if (!inputArr[1].contains("/by")) {
-            throw new InvalidFormatException("Deadline format should be: deadline <description> /by <date>");
+            throw new InvalidFormatException("Deadline format should be: deadline <description> /by <yyyy-MM-dd> HHmm");
         }
 
         String[] deadLineTemp = inputArr[1].split("/by\\s*", 2);
@@ -139,13 +142,18 @@ public class Trax {
             throw new InvalidFormatException("Deadline date cannot be empty.");
         }
 
-        String deadLine = String.format("(by: %s)", deadLineTemp[1].trim());
-        tasks.add(new Task(deadLineTemp[0].trim(), false, 'D', deadLine));
-        printAddedTask(tasks);
+        try {
+            LocalDateTime deadline = Task.parseDateTime(deadLineTemp[1].trim());
+            tasks.add(new Task(deadLineTemp[0].trim(), false, 'D', deadline));
+            printAddedTask(tasks);
+        } catch (DateTimeParseException e) {
+            throw new InvalidDateFormatException(
+                    "Please use yyyy-MM-dd HHmm format (e.g., 2019-12-02 1800)");
+        }
     }
 
     private static void handleEvent(ArrayList<Task> tasks, String[] inputArr)
-            throws EmptyDescriptionException, InvalidFormatException {
+            throws EmptyDescriptionException, InvalidFormatException, InvalidDateFormatException {
         if (inputArr.length < 2 || inputArr[1].trim().isEmpty()) {
             throw new EmptyDescriptionException("event");
         }
@@ -166,11 +174,22 @@ public class Trax {
             throw new InvalidFormatException("Event start and end times cannot be empty.");
         }
 
-        String start = eventTemp2[0].trim();
-        String end = eventTemp2[1].trim();
-        String duration = String.format("(from: %s to: %s)", start, end);
-        tasks.add(new Task(eventTemp[0].trim(), false, 'E', duration));
-        printAddedTask(tasks);
+        try {
+            LocalDateTime startTime = Task.parseDateTime(eventTemp2[0].trim());
+            LocalDateTime endTime = Task.parseDateTime(eventTemp2[1].trim());
+
+            // Validate that end time is after start time
+            if (endTime.isBefore(startTime) || endTime.isEqual(startTime)) {
+                throw new InvalidFormatException("Event end time must be after start time.");
+            }
+
+            tasks.add(new Task(eventTemp[0].trim(), false, 'E', startTime, endTime));
+            printAddedTask(tasks);
+        } catch (DateTimeParseException e) {
+            throw new InvalidDateFormatException(
+                    "Please use yyyy-MM-dd HHmm format (e.g., 2019-12-02 1800)");
+        }
+
     }
 
     public static void handleDelete(ArrayList<Task> tasks, String[] inputArr)
