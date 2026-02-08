@@ -7,10 +7,8 @@ import java.io.IOException;
 import java.io.FileReader;
 import java.io.FileWriter;
 
-//deletion is handled automatically
-
 /**
- * Handle storage and loading of inputted tasks from local storage
+ * Handle storage and loading of inputted tasks from local storage.
  */
 
 public class Storage {
@@ -22,11 +20,12 @@ public class Storage {
     }
 
     /**
-     * Loads tasks from file
+     * Loads tasks from file.
      *
-     * @return ArrayList of Task loaded from file
+     * @return ArrayList of Task loaded from file.
+     * @throws TraxException if there's error reading file.
      */
-    public ArrayList<Task> loadTasks() {
+    public ArrayList<Task> loadTasks() throws TraxException {
         ArrayList<Task> tasks = new ArrayList<>();
         File file = new File(filePath);
 
@@ -50,19 +49,19 @@ public class Storage {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error loading tasks: " + e.getMessage());
+            throw new TraxException("Error loading tasks: " + e.getMessage());
         }
 
         return tasks;
     }
 
     /**
-     * Saves tasks to the file
+     * Saves tasks to file.
      *
-     * @param tasks ArrayList of Task to save
-     * @throws IOException if unable to write to file
+     * @param tasks ArrayList of Task to save.
+     * @throws TraxException if unable to write to file.
      */
-    public void saveTasks(ArrayList<Task> tasks) throws IOException {
+    public void saveTasks(TaskList tasks) throws TraxException {
         File file = new File(filePath);
 
         // Create directory if it doesn't exist
@@ -72,23 +71,21 @@ public class Storage {
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            for (Task task : tasks) {
-                writer.write(formatTask(task));
+            for (int i = 0; i < tasks.size(); i++) {
+                writer.write(formatTaskForStorage(tasks.get(i)));
                 writer.newLine();
             }
         } catch (IOException e) {
-            System.out.println("Error saving tasks: " + e.getMessage());
+            throw new TraxException("Error saving tasks: " + e.getMessage());
         }
     }
 
     /**
-     * Converts a Task object to file format
-     * Format: TaskType | Completed | Description | DateTime
+     * Converts a Task object to file format.
+     * Format: TaskType | Completed | Description | DateTime.
      *
-     * @param task Task object
-     * @return Formatted task
      */
-    private String formatTask(Task task) {
+    private String formatTaskForStorage(Task task) {
         int completed = task.isCompleted() ? 1 : 0;
         return String.format("%c | %d | %s | %s",
                 task.getTaskType(),
@@ -98,10 +95,10 @@ public class Storage {
     }
 
     /**
-     * Parses a line of formatted task from file into a Task object
+     * Parses a line of formatted task from file into a Task object.
      *
-     * @param line Formatted task
-     * @return Task object
+     * @param line Formatted task string.
+     * @return Task object.
      */
     private Task parseTask(String line) {
         try {
@@ -114,10 +111,9 @@ public class Storage {
             char taskType = parts[0].charAt(0);
             boolean completed = parts[1].equals("1");
             String description = parts[2];
-            //String dateTime = parts.length > 3 ? parts[3] : "";
 
             //Create respective tasks
-            if(taskType == 'T') {
+            if (taskType == 'T') {
                 return new Task(description, completed, taskType);
             } else if (taskType == 'D') {
                 if (parts.length >= 4 && !parts[3].trim().isEmpty()) {
