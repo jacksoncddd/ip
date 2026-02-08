@@ -1,4 +1,4 @@
-T | 0 | assignments! | 
-T | 0 | read book | 
+T | 1 | assignments! | 
+T | 1 | read book | 
 D | 1 | return book | 2026-02-12 2359
-E | 1 | proj meeting | 2026-01-31 1400 | 2026-02-01 1500
+E | 0 | proj meeting | 2026-01-31 1400 | 2026-02-01 1500
