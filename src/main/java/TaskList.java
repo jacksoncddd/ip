@@ -19,6 +19,7 @@ public class TaskList {
      * Creates a TaskList with existing tasks.
      */
     public TaskList(ArrayList<Task> tasks) {
+
         this.tasks = tasks;
     }
 
@@ -26,7 +27,6 @@ public class TaskList {
      * Adds a task to the list.
      */
     public void add(Task task) {
-
         tasks.add(task);
     }
 
@@ -76,6 +76,28 @@ public class TaskList {
         }
         tasks.get(index).setCompleted(false);
     }
+
+
+    /**
+     * Finds tasks that contain the keyword in their description.
+     * Non case sensitive.
+     *
+     * @param keyword The keyword to search for.
+     * @return ArrayList of tasks that match the keyword.
+     */
+    public ArrayList<Task> find(String keyword) {
+        ArrayList<Task> matchingTasks = new ArrayList<>();
+        String lowerKeyword = keyword.toLowerCase();
+
+        for (Task task : tasks) {
+            if (task.getTask().toLowerCase().contains(lowerKeyword)) {
+                matchingTasks.add(task);
+            }
+        }
+
+        return matchingTasks;
+    }
+
 
     /**
      * Returns the number of tasks.

@@ -1,5 +1,7 @@
+import java.util.ArrayList;
+
 /**
- * Main class for Trax task manager
+ * Main class for Trax task manager.
  */
 public class Trax {
     private Storage storage;
@@ -75,6 +77,11 @@ public class Trax {
                     storage.saveTasks(tasks);
                     break;
 
+                case "find":
+                    handleFind(input);
+                    break;
+
+
                 default:
                     throw new UnknownCommandException();
                 }
@@ -144,4 +151,14 @@ public class Trax {
     public static void main(String[] args) {
         new Trax("./data/tasks.txt").run();
     }
+
+    /**
+     * Handles the find command.
+     */
+    private void handleFind(String input) throws TraxException {
+        String keyword = Parser.parseFind(input);
+        ArrayList<Task> matchingTasks = tasks.find(keyword);
+        ui.showFindResults(matchingTasks);
+    }
+
 }

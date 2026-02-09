@@ -129,4 +129,22 @@ public class Parser {
             throw new InvalidTaskNumberException();
         }
     }
+
+    /**
+     * Parses the keyword from find command.
+     *
+     * @param input User input.
+     * @return The keyword to search for.
+     * @throws TraxException if keyword is empty.
+     */
+    public static String parseFind(String input) throws TraxException {
+        String[] inputArr = input.split(" ", 2);
+
+        if (inputArr.length < 2 || inputArr[1].trim().isEmpty()) {
+            throw new EmptyDescriptionException("find keyword");
+        }
+
+        return inputArr[1].trim();
+    }
+
 }

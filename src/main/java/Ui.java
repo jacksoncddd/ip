@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 /**
  * Handles user interactions.
@@ -59,6 +60,24 @@ public class Ui {
             showError(e.getMessage());
             Exception ex = new Exception();
         }
+    }
+
+    /**
+     * Displays the results of find command.
+     *
+     * @param matchingTasks list of tasks that match the search keyword.
+     */
+    public void showFindResults(ArrayList<Task> matchingTasks) {
+        System.out.println(LINE);
+        if (matchingTasks.isEmpty()) { 
+            System.out.println("     No matching tasks found.");
+        } else {
+            System.out.println("     Here are the matching tasks in your list:");
+            for (int i = 0; i < matchingTasks.size(); i++) {
+                System.out.printf("     %d.%s%n", i + 1, matchingTasks.get(i).toString());
+            }
+        }
+        System.out.println(LINE);
     }
 
     /**
