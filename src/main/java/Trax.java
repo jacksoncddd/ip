@@ -35,48 +35,48 @@ public class Trax {
                 String command = Parser.parseCommand(input);
 
                 switch (command) {
-                    case "bye":
-                        storage.saveTasks(tasks);
-                        ui.showGoodbye();
-                        isRunning = false;
-                        break;
+                case "bye":
+                    storage.saveTasks(tasks);
+                    ui.showGoodbye();
+                    isRunning = false;
+                    break;
 
-                    case "list":
-                        ui.showTaskList(tasks);
-                        break;
+                case "list":
+                    ui.showTaskList(tasks);
+                    break;
 
-                    case "mark":
-                        handleMark(input);
-                        storage.saveTasks(tasks);
-                        break;
+                case "mark":
+                    handleMark(input);
+                    storage.saveTasks(tasks);
+                    break;
 
-                    case "unmark":
-                        handleUnmark(input);
-                        storage.saveTasks(tasks);
-                        break;
+                case "unmark":
+                    handleUnmark(input);
+                    storage.saveTasks(tasks);
+                    break;
 
-                    case "todo":
-                        handleTodo(input);
-                        storage.saveTasks(tasks);
-                        break;
+                case "todo":
+                    handleTodo(input);
+                    storage.saveTasks(tasks);
+                    break;
 
-                    case "deadline":
-                        handleDeadline(input);
-                        storage.saveTasks(tasks);
-                        break;
+                case "deadline":
+                    handleDeadline(input);
+                    storage.saveTasks(tasks);
+                    break;
 
-                    case "event":
-                        handleEvent(input);
-                        storage.saveTasks(tasks);
-                        break;
+                case "event":
+                    handleEvent(input);
+                    storage.saveTasks(tasks);
+                    break;
 
-                    case "delete":
-                        handleDelete(input);
-                        storage.saveTasks(tasks);
-                        break;
+                case "delete":
+                    handleDelete(input);
+                    storage.saveTasks(tasks);
+                    break;
 
-                    default:
-                        throw new UnknownCommandException();
+                default:
+                    throw new UnknownCommandException();
                 }
 
             } catch (TraxException e) {

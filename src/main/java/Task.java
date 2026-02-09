@@ -80,31 +80,38 @@ public class Task {
 
 
     public String getTask() {
+
         return task;
     }
 
     public boolean isCompleted() {
+
         return isCompleted;
     }
 
     public void setCompleted(boolean completed) {
+
         this.isCompleted = completed;
     }
 
     public char getTaskType() {
+
         return taskType;
     }
 
 
     public LocalDateTime getDeadlineDate() {
+
         return deadline;
     }
 
     public LocalDateTime getEventStart() {
+
         return eventStart;
     }
 
     public LocalDateTime getEventEnd() {
+
         return eventEnd;
     }
 
