@@ -1,4 +1,11 @@
+package trax.tasklist;
+
 import java.util.ArrayList;
+
+import trax.task.Task;
+import trax.exception.TraxException;
+import trax.exception.InvalidTaskNumberException;
+
 
 /**
  * Contains the task list and operations to manipulate it.
@@ -103,6 +110,7 @@ public class TaskList {
      * Returns the number of tasks.
      */
     public int size() {
+
         return tasks.size();
     }
 
@@ -110,6 +118,7 @@ public class TaskList {
      * Returns the ArrayList of tasks.
      */
     public ArrayList<Task> getTasks() {
+
         return tasks;
     }
 }

@@ -1,5 +1,10 @@
+package trax.ui;
+
 import java.util.Scanner;
 import java.util.ArrayList;
+import trax.exception.TraxException;
+import trax.task.Task;
+import trax.tasklist.TaskList;
 
 /**
  * Handles user interactions.

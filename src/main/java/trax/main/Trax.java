@@ -1,4 +1,14 @@
+package trax.main;
+
 import java.util.ArrayList;
+
+import trax.task.Task;
+import trax.tasklist.TaskList;
+import trax.ui.Ui;
+import trax.storage.Storage;
+import trax.parser.Parser;
+import trax.exception.TraxException;
+import trax.exception.UnknownCommandException;
 
 /**
  * Main class for Trax task manager.
