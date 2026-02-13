@@ -1,5 +1,5 @@
 # Trax Project
- `Where's my fudging money!!!`
+ > Where's my fudging money!!!
 
 Trax plus points:
 -super easy to use
@@ -19,7 +19,7 @@ All you need to do is,
 
 If you are a Java programmer, you can use it to practice Java too. Here's the `main` method:
 
-```
+```java
 public class Main {
     public static void main(String[] args) {
         Application.launch(MainApp.class, args);
