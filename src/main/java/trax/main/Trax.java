@@ -18,18 +18,18 @@ public class Trax {
     private TaskList tasks;
     private Ui ui;
 
+    private static final String FILE_PATH = "./data/tasks.txt";
+
     /**
      * Constructor for Trax.
-     *
-     * @param filePath path to the data file.
      */
-    public Trax(String filePath) {
+    public Trax() {
         ui = new Ui();
-        storage = new Storage(filePath);
+        storage = new Storage(FILE_PATH);
         try {
             tasks = new TaskList(storage.loadTasks());
         } catch (TraxException e) {
-            ui.showLoadingError();
+            System.out.println(ui.showLoadingError());
             tasks = new TaskList();
         }
     }
@@ -37,138 +37,136 @@ public class Trax {
     /**
      * Runs the main program loop.
      */
-    public void run() {
-        ui.showWelcome();
+    public String run(String input) {
+        String response;
+        try {
+            String command = Parser.parseCommand(input);
 
-        boolean isRunning = true;
-        while (isRunning) {
-            try {
-                String input = ui.readCommand();
-                String command = Parser.parseCommand(input);
+            switch (command) {
+            case "bye":
+                storage.saveTasks(tasks);
+                response = ui.showGoodbye();
+                break;
 
-                switch (command) {
-                case "bye":
-                    storage.saveTasks(tasks);
-                    ui.showGoodbye();
-                    isRunning = false;
-                    break;
+            case "list":
+                response = ui.showTaskList(tasks);
+                break;
+            case "mark":
+                response = handleMark(input);
+                storage.saveTasks(tasks);
+                break;
 
-                case "list":
-                    ui.showTaskList(tasks);
-                    break;
+            case "unmark":
+                response = handleUnmark(input);
+                storage.saveTasks(tasks);
+                break;
 
-                case "mark":
-                    handleMark(input);
-                    storage.saveTasks(tasks);
-                    break;
+            case "todo":
+                response = handleTodo(input);
+                storage.saveTasks(tasks);
+                break;
 
-                case "unmark":
-                    handleUnmark(input);
-                    storage.saveTasks(tasks);
-                    break;
+            case "deadline":
+                response = handleDeadline(input);
+                storage.saveTasks(tasks);
+                break;
 
-                case "todo":
-                    handleTodo(input);
-                    storage.saveTasks(tasks);
-                    break;
+            case "event":
+                response = handleEvent(input);
+                storage.saveTasks(tasks);
+                break;
 
-                case "deadline":
-                    handleDeadline(input);
-                    storage.saveTasks(tasks);
-                    break;
+            case "delete":
+                response = handleDelete(input);
+                storage.saveTasks(tasks);
+                break;
 
-                case "event":
-                    handleEvent(input);
-                    storage.saveTasks(tasks);
-                    break;
+            case "find":
+                response = handleFind(input);
+                break;
 
-                case "delete":
-                    handleDelete(input);
-                    storage.saveTasks(tasks);
-                    break;
-
-                case "find":
-                    handleFind(input);
-                    break;
-
-
-                default:
-                    throw new UnknownCommandException();
-                }
-
-            } catch (TraxException e) {
-                ui.showError(e.getMessage());
+            default:
+                throw new UnknownCommandException();
             }
+        } catch (TraxException e) {
+            return ui.showError(e.getMessage());
         }
+        //ui.close();
+        return response;
+    }
 
-        ui.close();
+//    public static void main(String[] args) {
+//        new Trax().run();
+//    }
+
+    /**
+     * Shows welcome.
+     */
+    public String showWelcome() {
+        return ui.showWelcome();
     }
 
     /**
      * Handles the todo command.
      */
-    private void handleTodo(String input) throws TraxException {
+    public String handleTodo(String input) throws TraxException {
         Task task = Parser.parseTodo(input);
         tasks.add(task);
-        ui.showTaskAdded(task, tasks.size());
+        return ui.showTaskAdded(task, tasks.size());
     }
 
     /**
      * Handles the deadline command.
      */
-    private void handleDeadline(String input) throws TraxException {
+    public String handleDeadline(String input) throws TraxException {
         Task task = Parser.parseDeadline(input);
         tasks.add(task);
-        ui.showTaskAdded(task, tasks.size());
+        return ui.showTaskAdded(task, tasks.size());
     }
 
     /**
      * Handles the event command.
      */
-    private void handleEvent(String input) throws TraxException {
+    private String handleEvent(String input) throws TraxException {
         Task task = Parser.parseEvent(input);
         tasks.add(task);
-        ui.showTaskAdded(task, tasks.size());
+        return ui.showTaskAdded(task, tasks.size());
     }
 
     /**
      * Handles the mark command.
      */
-    private void handleMark(String input) throws TraxException {
+    private String handleMark(String input) throws TraxException {
         int index = Parser.parseTaskIndex(input);
         tasks.markTask(index);
-        ui.showTaskMarked(tasks.get(index));
+        return ui.showTaskMarked(tasks.get(index));
     }
 
     /**
      * Handles the unmark command.
      */
-    private void handleUnmark(String input) throws TraxException {
+    private String handleUnmark(String input) throws TraxException {
         int index = Parser.parseTaskIndex(input);
         tasks.unmarkTask(index);
-        ui.showTaskUnmarked(tasks.get(index));
+        return ui.showTaskUnmarked(tasks.get(index));
     }
 
     /**
      * Handles the delete command.
      */
-    private void handleDelete(String input) throws TraxException {
+    private String handleDelete(String input) throws TraxException {
         int index = Parser.parseTaskIndex(input);
         Task deletedTask = tasks.delete(index);
-        ui.showTaskDeleted(deletedTask, tasks.size());
-    }
-
-    public static void main(String[] args) {
-        new Trax("./data/tasks.txt").run();
+        return ui.showTaskDeleted(deletedTask, tasks.size());
     }
 
     /**
      * Handles the find command.
      */
-    private void handleFind(String input) throws TraxException {
+    private String handleFind(String input) throws TraxException {
         String keyword = Parser.parseFind(input);
         ArrayList<Task> matchingTasks = tasks.find(keyword);
-        ui.showFindResults(matchingTasks);
+        return ui.showFindResults(matchingTasks);
     }
 
 }

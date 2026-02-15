@@ -2,13 +2,13 @@ package trax.ui;
 
 import java.util.Scanner;
 import java.util.ArrayList;
+
 import trax.exception.TraxException;
 import trax.task.Task;
 import trax.tasklist.TaskList;
 
 /**
  * Handles user interactions.
- *
  */
 public class Ui {
     private Scanner scanner;
@@ -19,106 +19,108 @@ public class Ui {
     }
 
     /**
-     * Displays welcome message.
+     * Returns welcome message.
      */
-    public void showWelcome() {
-        System.out.println("Hello! I'm Trax");
-        System.out.println("What can I do for you?\n");
+    public String showWelcome() {
+        return "Hello! I'm Trax\n" + "What can I do for you?\n";
     }
 
     /**
-     * Displays goodbye message.
+     * Returns goodbye message.
      */
-    public void showGoodbye() {
-
-        System.out.println("Bye. Hope to see you again soon!");
+    public String showGoodbye() {
+        return "Bye. Hope to see you again soon!";
     }
 
     /**
-     * Displays error when loading file fails.
+     * Returns error when loading file fails.
      */
-    public void showLoadingError() {
-        System.out.println("Error loading tasks from local storage file. Starting with empty task list.");
+    public String showLoadingError() {
+        return "Error loading tasks from local storage file. Starting with empty task list.";
     }
 
     /**
-     * Displays error message.
+     * Returns error message.
      *
      * @param message Error message.
      */
-    public void showError(String message) {
-        System.out.println(LINE);
-        System.out.println("     " + message);
-        System.out.println(LINE);
+    public String showError(String message) {
+        return LINE + "\n"
+                + "     " + message + "\n"
+                + LINE;
     }
 
+
     /**
-     * Displays task list.
+     * Returns formatted task list.
      */
-    public void showTaskList(TaskList tasks) {
-        System.out.println("Here are the tasks in your list:");
+    public String showTaskList(TaskList tasks) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Here are the tasks in your list:\n");
         try {
             for (int i = 0; i < tasks.size(); i++) {
-                System.out.printf("%d. %s%n", i + 1, tasks.get(i).toString());
+                sb.append(String.format("%d. %s%n", i + 1, tasks.get(i).toString()));
             }
         } catch (TraxException e) {
-            showError(e.getMessage());
-            Exception ex = new Exception();
+            return showError(e.getMessage());
         }
+        return sb.toString();
     }
 
     /**
-     * Displays the results of find command.
+     * Returns the results of find command.
      *
      * @param matchingTasks list of tasks that match the search keyword.
      */
-    public void showFindResults(ArrayList<Task> matchingTasks) {
-        System.out.println(LINE);
-        if (matchingTasks.isEmpty()) { 
-            System.out.println("     No matching tasks found.");
+    public String showFindResults(ArrayList<Task> matchingTasks) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(LINE).append("\n");
+        if (matchingTasks.isEmpty()) {
+            sb.append("     No matching tasks found.\n");
         } else {
-            System.out.println("     Here are the matching tasks in your list:");
+            sb.append("     Here are the matching tasks in your list:\n");
             for (int i = 0; i < matchingTasks.size(); i++) {
-                System.out.printf("     %d.%s%n", i + 1, matchingTasks.get(i).toString());
+                sb.append(String.format("     %d.%s%n", i + 1, matchingTasks.get(i).toString()));
             }
         }
-        System.out.println(LINE);
+        sb.append(LINE);
+        return sb.toString();
     }
 
     /**
-     * Displays message when task is added.
+     * Returns message when task is added.
      */
-    public void showTaskAdded(Task task, int totalTasks) {
-        System.out.printf("Got it. I've added this task:%n %s%n", task.toString());
-        System.out.printf("Now you have %d task%s in the list.%n",
+    public String showTaskAdded(Task task, int totalTasks) {
+        return String.format("Got it. I've added this task:%n %s%n", task.toString())
+                + String.format("Now you have %d task%s in the list.%n",
                 totalTasks,
                 totalTasks == 1 ? "" : "s");
     }
 
     /**
-     * Displays message when task is deleted.
+     * Returns message when task is deleted.
      */
-    public void showTaskDeleted(Task task, int totalTasks) {
-        System.out.printf("Noted. I've removed this task:%n %s%n", task.toString());
-        System.out.printf("Now you have %d task%s in the list.%n",
+    public String showTaskDeleted(Task task, int totalTasks) {
+        return String.format("Noted. I've removed this task:%n %s%n", task.toString())
+                + String.format("Now you have %d task%s in the list.%n",
                 totalTasks,
                 totalTasks == 1 ? "" : "s");
     }
 
     /**
-     * Displays message when task is marked as done.
+     * Returns  message when task is marked as done.
      */
-    public void showTaskMarked(Task task) {
-        System.out.println("Nice! I've marked this task as done:");
-        System.out.println("  " + task.toString());
+    public String showTaskMarked(Task task) {
+        return "Nice! I've marked this task as done:\n"
+                + "  " + task.toString();
     }
 
     /**
-     * Displays message when task is unmarked.
+     * Returns  message when task is unmarked.
      */
-    public void showTaskUnmarked(Task task) {
-        System.out.println("OK, I've marked this task as not done yet:");
-        System.out.println("  " + task.toString());
+    public String showTaskUnmarked(Task task) {
+        return "OK, I've marked this task as not done yet:\n"
+                + "  " + task.toString();
     }
 
     /**
