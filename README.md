@@ -4,7 +4,7 @@
 Trax plus points:
 - super easy to use
 - super ~~lame~~ cool
-- super fun
+- super _fun_
 
 ITS **FREE!**
 
@@ -13,7 +13,7 @@ All you need to do is,
 2. bam done 🚀
 
 ## 🛠 Features
-- [x] Managing tasks
+- [] Managing tasks
 - [x] Managing deadlines
 
 
