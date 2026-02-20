@@ -13,7 +13,7 @@ All you need to do is,
 2. bam done 🚀
 
 ## 🛠 Features
-- [] Managing tasks
+- [ ] Managing tasks
 - [x] Managing deadlines
 
 
