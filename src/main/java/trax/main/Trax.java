@@ -11,7 +11,7 @@ import trax.exception.TraxException;
 import trax.exception.UnknownCommandException;
 
 /**
- * Main class for Trax task manager.
+ * Main program flow for Trax task manager.
  */
 public class Trax {
     private Storage storage;
@@ -91,7 +91,6 @@ public class Trax {
         } catch (TraxException e) {
             return ui.showError(e.getMessage());
         }
-        //ui.close();
         return response;
     }
 
