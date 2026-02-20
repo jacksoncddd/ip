@@ -1,5 +1,7 @@
 package trax.gui;
 
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -7,7 +9,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import trax.main.Trax;
+
 
 /**
  * Controller for the main GUI.
@@ -32,14 +36,16 @@ public class MainWindow extends AnchorPane {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
-    /** Injects the Trax instance */
+    /**
+     * Injects the Trax instance
+     */
     public void setTrax(Trax t) {
         trax = t;
         dialogContainer.getChildren().add(DialogBox.getTraxDialog(trax.showWelcome(), traxImage));
     }
 
     /**
-     * Creates two dialog boxes, one echoing user input and the other containing Duke's reply and then appends them to
+     * Creates two dialog boxes, one echoing user input and the other containing Trax's reply and then appends them to
      * the dialog container. Clears the user input after processing.
      */
     @FXML
@@ -51,5 +57,11 @@ public class MainWindow extends AnchorPane {
                 DialogBox.getTraxDialog(response, traxImage)
         );
         userInput.clear();
+
+        if (input.equals("bye")) {
+            PauseTransition delay = new PauseTransition(Duration.seconds(3));
+            delay.setOnFinished(event -> Platform.exit());
+            delay.play();
+        }
     }
 }
