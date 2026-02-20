@@ -3,3 +3,6 @@ T | 1 | read book |
 D | 0 | return book | 2026-02-12 2359
 E | 0 | proj meeting | 2026-01-31 1400 | 2026-02-01 1500
 T | 0 | test 16/02/2026 | 
+E | 0 | gimmemymoney !!! | 2026-02-16 2359 | 2026-02-17 0000
+T | 0 | testbugger | 
+T | 0 | testdebug | 

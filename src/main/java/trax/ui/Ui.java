@@ -16,6 +16,7 @@ public class Ui {
 
     public Ui() {
         this.scanner = new Scanner(System.in);
+        assert scanner != null : "Scanner should be initialized";
     }
 
     /**

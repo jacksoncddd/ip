@@ -18,15 +18,15 @@ public class TaskList {
      * Creates an empty TaskList.
      */
     public TaskList() {
-
         this.tasks = new ArrayList<>();
+        assert tasks != null : "Tasks list should be initialized";
     }
 
     /**
      * Creates a TaskList with existing tasks.
      */
     public TaskList(ArrayList<Task> tasks) {
-
+        assert tasks != null : "Input tasks list cannot be null";
         this.tasks = tasks;
     }
 
@@ -34,7 +34,10 @@ public class TaskList {
      * Adds a task to the list.
      */
     public void add(Task task) {
+        assert task != null : "Task to add cannot be null";
+
         tasks.add(task);
+        assert tasks.contains(task) : "Task list should contain the added task";
     }
 
     /**
@@ -44,7 +47,13 @@ public class TaskList {
         if (index < 0 || index >= tasks.size()) {
             throw new InvalidTaskNumberException();
         }
-        return tasks.remove(index);
+        int sizeBefore = tasks.size();
+        Task deletedTask = tasks.remove(index);
+
+        assert deletedTask != null : "Deleted task should not be null";
+        assert tasks.size() == sizeBefore - 1 : "Task list size should decrease by 1 after deletion";
+
+        return deletedTask;
     }
 
     /**
@@ -57,7 +66,11 @@ public class TaskList {
         if (index < 0 || index >= tasks.size()) {
             throw new InvalidTaskNumberException();
         }
-        return tasks.get(index);
+
+        Task task = tasks.get(index);
+        assert task != null : "Retrieved task should not be null";
+
+        return task;
     }
 
     /**
@@ -96,6 +109,8 @@ public class TaskList {
         ArrayList<Task> matchingTasks = new ArrayList<>();
         String lowerKeyword = keyword.toLowerCase();
 
+        assert lowerKeyword != null : "Lowercase keyword should not be null";
+
         for (Task task : tasks) {
             if (task.getTask().toLowerCase().contains(lowerKeyword)) {
                 matchingTasks.add(task);
@@ -110,7 +125,6 @@ public class TaskList {
      * Returns the number of tasks.
      */
     public int size() {
-
         return tasks.size();
     }
 
@@ -118,7 +132,6 @@ public class TaskList {
      * Returns the ArrayList of tasks.
      */
     public ArrayList<Task> getTasks() {
-
         return tasks;
     }
 }

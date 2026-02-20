@@ -26,6 +26,10 @@ public class Trax {
     public Trax() {
         ui = new Ui();
         storage = new Storage(FILE_PATH);
+
+        assert ui != null : "Ui should be initialized";
+        assert storage != null : "Storage should be initialized";
+
         try {
             tasks = new TaskList(storage.loadTasks());
         } catch (TraxException e) {
@@ -38,9 +42,12 @@ public class Trax {
      * Runs the main program loop.
      */
     public String run(String input) {
+        assert input != null : "Input cannot be null";
+
         String response;
         try {
             String command = Parser.parseCommand(input);
+            assert command != null : "Command should not be null after parsing";
 
             switch (command) {
             case "bye":
@@ -88,6 +95,9 @@ public class Trax {
             default:
                 throw new UnknownCommandException();
             }
+
+            assert response != null : "Response should not be null";
+
         } catch (TraxException e) {
             return ui.showError(e.getMessage());
         }
@@ -111,6 +121,10 @@ public class Trax {
      */
     public String handleTodo(String input) throws TraxException {
         Task task = Parser.parseTodo(input);
+
+        assert task != null : "Parsed task should not be null";
+        assert task.getTaskType() == 'T' : "Task type should be 'T' for todo";
+
         tasks.add(task);
         return ui.showTaskAdded(task, tasks.size());
     }
@@ -120,6 +134,11 @@ public class Trax {
      */
     public String handleDeadline(String input) throws TraxException {
         Task task = Parser.parseDeadline(input);
+
+        assert task != null : "Parsed task should not be null";
+        assert task.getTaskType() == 'D' : "Task type should be 'D' for deadline";
+        assert task.getDeadlineDate() != null : "Deadline date should not be null";
+
         tasks.add(task);
         return ui.showTaskAdded(task, tasks.size());
     }
@@ -129,6 +148,13 @@ public class Trax {
      */
     private String handleEvent(String input) throws TraxException {
         Task task = Parser.parseEvent(input);
+
+        assert task != null : "Parsed task should not be null";
+        assert task.getTaskType() == 'E' : "Task type should be 'E' for event";
+        assert task.getEventStart() != null : "Event start time should not be null";
+        assert task.getEventEnd() != null : "Event end time should not be null";
+        assert task.getEventEnd().isAfter(task.getEventStart()) : "Event end should be after start";
+
         tasks.add(task);
         return ui.showTaskAdded(task, tasks.size());
     }
@@ -138,6 +164,10 @@ public class Trax {
      */
     private String handleMark(String input) throws TraxException {
         int index = Parser.parseTaskIndex(input);
+
+        assert index >= 0 : "Task index should be non-negative";
+        assert index < tasks.size() : "Task index should be within bounds";
+
         tasks.markTask(index);
         return ui.showTaskMarked(tasks.get(index));
     }
@@ -147,6 +177,10 @@ public class Trax {
      */
     private String handleUnmark(String input) throws TraxException {
         int index = Parser.parseTaskIndex(input);
+
+        assert index >= 0 : "Task index should be non-negative";
+        assert index < tasks.size() : "Task index should be within bounds";
+
         tasks.unmarkTask(index);
         return ui.showTaskUnmarked(tasks.get(index));
     }
@@ -156,6 +190,10 @@ public class Trax {
      */
     private String handleDelete(String input) throws TraxException {
         int index = Parser.parseTaskIndex(input);
+
+        assert index >= 0 : "Task index should be non-negative";
+        assert index < tasks.size() : "Task index should be within bounds";
+
         Task deletedTask = tasks.delete(index);
         return ui.showTaskDeleted(deletedTask, tasks.size());
     }

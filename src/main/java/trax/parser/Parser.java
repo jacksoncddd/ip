@@ -19,6 +19,8 @@ public class Parser {
      * Parses user input and returns the command type.
      */
     public static String parseCommand(String input) {
+        assert input != null : "Input cannot be null";
+
         String[] inputArr = input.trim().split(" ", 2);
         return inputArr[0].toLowerCase();
     }
@@ -30,6 +32,8 @@ public class Parser {
      * @exception TraxException if input command is empty.
      */
     public static Task parseTodo(String input) throws TraxException {
+        assert input != null : "Input cannot be null";
+
         String[] inputArr = input.split(" ", 2);
 
         if (inputArr.length < 2 || inputArr[1].trim().isEmpty()) {
@@ -45,6 +49,8 @@ public class Parser {
      * @exception TraxException if input command is empty or invalid format.
      */
     public static Task parseDeadline(String input) throws TraxException {
+        assert input != null : "Input cannot be null";
+
         String[] inputArr = input.split(" ", 2);
 
         if (inputArr.length < 2 || inputArr[1].trim().isEmpty()) {
@@ -81,6 +87,8 @@ public class Parser {
      * @exception TraxException if input command is empty or invalid format.
      */
     public static Task parseEvent(String input) throws TraxException {
+        assert input != null : "Input cannot be null";
+
         String[] inputArr = input.split(" ", 2);
 
         if (inputArr.length < 2 || inputArr[1].trim().isEmpty()) {
@@ -126,6 +134,8 @@ public class Parser {
      * @exception TraxException if input index is empty or invalid format.
      */
     public static int parseTaskIndex(String input) throws TraxException {
+        assert input != null : "Input cannot be null";
+
         String[] inputArr = input.split(" ", 2);
 
         if (inputArr.length < 2 || inputArr[1].trim().isEmpty()) {
@@ -147,6 +157,8 @@ public class Parser {
      * @throws TraxException if keyword is empty.
      */
     public static String parseFind(String input) throws TraxException {
+        assert input != null : "Input cannot be null";
+
         String[] inputArr = input.split(" ", 2);
 
         if (inputArr.length < 2 || inputArr[1].trim().isEmpty()) {
