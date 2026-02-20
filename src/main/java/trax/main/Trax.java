@@ -68,16 +68,19 @@ public class Trax {
                 storage.saveTasks(tasks);
                 break;
 
+            case "td":
             case "todo":
                 response = handleTodo(input);
                 storage.saveTasks(tasks);
                 break;
 
+            case "dl":
             case "deadline":
                 response = handleDeadline(input);
                 storage.saveTasks(tasks);
                 break;
 
+            case "ev":
             case "event":
                 response = handleEvent(input);
                 storage.saveTasks(tasks);
