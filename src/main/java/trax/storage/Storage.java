@@ -22,6 +22,9 @@ public class Storage {
     private String filePath;
 
     public Storage(String filePath) {
+        assert filePath != null : "File path cannot be null";
+        assert !filePath.isEmpty() : "File path cannot be empty";
+
         this.filePath = filePath;
     }
 
@@ -43,6 +46,7 @@ public class Storage {
 
         // If file doesn't exist, return empty list
         if (!file.exists()) {
+            assert tasks.isEmpty() : "Tasks should be empty when file doesn't exist";
             return tasks;
         }
 
