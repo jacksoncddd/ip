@@ -107,12 +107,8 @@ public class Trax {
         return response;
     }
 
-//    public static void main(String[] args) {
-//        new Trax().run();
-//    }
-
     /**
-     * Shows welcome.
+     * Shows welcome message.
      */
     public String showWelcome() {
         return ui.showWelcome();

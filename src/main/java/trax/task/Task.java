@@ -5,8 +5,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 /**
- * Task class represents a task object
- * 3 types of tasks - Todos, Deadline, Event
+ * Task class represents a task object.
+ * 3 types of tasks - Todos, Deadline, Event.
  */
 
 public class Task {
@@ -28,11 +28,11 @@ public class Task {
 
 
     /**
-     * Constructor for Todos task
+     * Constructor for Todos task.
      *
-     * @param task      Task description
-     * @param completed Task completion
-     * @param taskType  Task type
+     * @param task Task description.
+     * @param completed Task completion.
+     * @param taskType Task type.
      */
     public Task(String task, boolean completed, char taskType) {
         this.task = task;
@@ -44,12 +44,12 @@ public class Task {
     }
 
     /**
-     * Constructor for Deadline task
+     * Constructor for Deadline task.
      *
-     * @param task      Task description
-     * @param completed Task completion
-     * @param taskType  Task type
-     * @param deadline  Deadline dateTime
+     * @param task Task description.
+     * @param completed Task completion.
+     * @param taskType Task type.
+     * @param deadline Deadline dateTime.
      */
     public Task(String task, boolean completed, char taskType, LocalDateTime deadline) {
         this.task = task;
@@ -61,14 +61,13 @@ public class Task {
     }
 
     /**
+     * Constructor for Event task.
      *
-     * Constructor for Event task
-     *
-     * @param task       Task description
-     * @param completed  Task completion
-     * @param taskType   Task type
-     * @param eventStart Event start dateTime
-     * @param eventEnd   Event end dateTime
+     * @param task Task description.
+     * @param completed Task completion.
+     * @param taskType Task type.
+     * @param eventStart Event start dateTime.
+     * @param eventEnd Event end dateTime.
      */
     public Task(String task, boolean completed, char taskType,
                 LocalDateTime eventStart, LocalDateTime eventEnd) {
@@ -136,22 +135,22 @@ public class Task {
     }
 
     /**
-     * Parses a datetime string in format yyyy-MM-dd HHmm
+     * Parses a datetime string in format yyyy-MM-dd HHmm.
      *
-     * @param dateTimeStr DateTime in string format
-     * @return Local DateTime object
+     * @param dateTimeStr DateTime in string format.
+     * @return Local DateTime object.
      */
     public static LocalDateTime parseDateTime(String dateTimeStr) throws DateTimeParseException {
         return LocalDateTime.parse(dateTimeStr.trim(), INPUT_DATETIME_FORMAT);
     }
 
     /**
-     * Formats DateTime for file storage
-     * For events: "start | end"
-     * For deadlines: "date"
-     * For todos: ""
+     * Formats DateTime for file storage.
+     * For events: "start | end".
+     * For deadlines: "date".
+     * For todos: "".
      *
-     * @return Formatted String Datetime
+     * @return Formatted String Datetime.
      */
     public String getDateTimeForStorage() {
         if (taskType == 'D' && deadline != null) {

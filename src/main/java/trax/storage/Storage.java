@@ -93,7 +93,6 @@ public class Storage {
     /**
      * Converts a Task object to file format.
      * Format: TaskType | Completed | Description | DateTime.
-     *
      */
     private String formatTaskForStorage(Task task) {
         int completed = task.isCompleted() ? 1 : 0;

@@ -45,6 +45,7 @@ public class Parser {
 
     /**
      * Parses a deadline command and creates a Task.
+     *
      * @return Deadline task object.
      * @exception TraxException if input command is empty or invalid format.
      */
@@ -83,6 +84,7 @@ public class Parser {
 
     /**
      * Parses an event command and creates a Task.
+     *
      * @return Event task object.
      * @exception TraxException if input command is empty or invalid format.
      */
