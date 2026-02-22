@@ -56,16 +56,20 @@ public class Ui {
      * Returns formatted task list.
      */
     public String showTaskList(TaskList tasks) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Here are the tasks in your list:\n");
-        try {
-            for (int i = 0; i < tasks.size(); i++) {
-                sb.append(String.format("%d. %s%n", i + 1, tasks.get(i).toString()));
+        if(tasks.getTasks().isEmpty()) {
+            return "There are no current tasks. Lets add some!";
+        } else {
+            StringBuilder sb = new StringBuilder();
+            sb.append("Here are the tasks in your list:\n");
+            try {
+                for (int i = 0; i < tasks.size(); i++) {
+                    sb.append(String.format("%d. %s%n", i + 1, tasks.get(i).toString()));
+                }
+            } catch (TraxException e) {
+                return showError(e.getMessage());
             }
-        } catch (TraxException e) {
-            return showError(e.getMessage());
+            return sb.toString();
         }
-        return sb.toString();
     }
 
     /**
